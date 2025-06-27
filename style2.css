@@ -1,0 +1,182 @@
+body {
+    background-image: url(images/francaBG2.svg);
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: rgb(10, 100, 140); /* Cor de texto vibrante */
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative; /* Essencial para posicionar os pseudo-elementos */
+}
+
+/* O overlay branco existente */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.3);
+    z-index: -1; /* Abaixo do conteúdo */
+}
+
+/* NOVO: Pseudo-elemento para o alerta vermelho */
+body::after { /* Usamos ::after para não conflitar com o ::before existente */
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: red; /* Cor vermelha para piscar */
+    z-index: 0; /* Acima da imagem de fundo e do overlay branco, mas abaixo do conteúdo */
+    opacity: 0; /* Inicia transparente */
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out; /* Suaviza a transição da opacidade */
+}
+
+/* Animação de piscar para o pseudo-elemento vermelho */
+body.alert-blink::after {
+    visibility: visible;
+    animation: blinkRedOverlay 0.5s infinite alternate; /* Animação de piscar */
+}
+
+@keyframes blinkRedOverlay {
+    from { opacity: 0.7; } /* Forte o suficiente para aparecer, mas não totalmente opaco */
+    to { opacity: 0; } /* Transparente para dar o efeito de piscar */
+}
+
+/* ... o restante do seu CSS permanece o mesmo ... */
+
+
+.container {
+    background-color: rgba(200,200,200,0.7);
+    padding: 40px 60px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 1.5s ease-out;
+    position: relative; /* Para posicionar o loader */
+    z-index: 1; /* Garante que o container esteja acima do vídeo/imagem */
+    opacity: 1; /* Por padrão, visível */
+    transition: opacity 0.5s ease; /* Para esconder o container suavemente */
+}
+
+/* Esconde o container quando o vídeo/imagem aparecer */
+.container.hidden {
+    opacity: 0;
+    pointer-events: none; /* Desabilita interações */
+}
+
+h1 {
+    font-size: 3.5em;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+}
+
+.start-button {
+    padding: 15px 40px;
+    font-size: 1.8em;
+    background-color: rgb(237,41,57); /* Um verde chamativo */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.start-button:hover {
+    background-color: rgb(237,41,57);
+    transform: scale(1.05);
+}
+
+.start-button:active {
+    background-color: rgb(180, 36, 48);
+    transform: scale(0.98);
+}
+
+.start-button:disabled {
+    background-color: #888;
+    cursor: not-allowed;
+}
+
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Estilo para o loader (opcional, mas recomendado) */
+.loader-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loader-wrapper.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.loader {
+    margin-right: 25px;
+    border: 10px solid rgb(230, 230, 230); /* Light grey */
+    border-top: 10px solid red; /* Blue */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: rodajequiti 1s linear infinite;
+}
+
+@keyframes rodajequiti {
+    100% { transform: rotate(360deg); }
+}
+
+.countdown {
+    font-size: 2em;
+    color: white;
+    margin-top: 20px;
+    margin-left: 25px;
+}
+
+.message {
+    font-size: 1.5em;
+    color: white;
+    margin-top: 20px;
+}
+
+/* Estilos para o vídeo e a imagem em tela cheia */
+.fullscreen-media {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Garante que o vídeo/imagem cubra a tela sem distorcer */
+    z-index: -2; /* Fica atrás do container inicial */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease;
+}
+
+.fullscreen-media.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 20; /* Fica na frente quando ativo */
+}
